@@ -1,0 +1,32 @@
+pipeline {
+    agent any
+
+    tools{
+        maven 'maven-home'
+    }
+
+    stages {
+        stage('build') {
+            steps {
+                echo 'compiling the worker module'
+                sh 'cd worker && mvn compile'
+            }
+        }
+        stage('test') {
+            steps {
+                echo 'test has not been configured yet'
+            }
+        }
+        stage('package') {
+            steps {
+                echo 'package has not been configured yet'
+            }
+        }
+    }
+
+    post{
+        always{
+            echo 'build pipeline for worker is complete..'
+        }
+    }
+}
