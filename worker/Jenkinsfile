@@ -15,11 +15,13 @@ pipeline {
         stage('test') {
             steps {
                 echo 'test has not been configured yet'
+                sh 'cd worker && mvn clean test'
             }
         }
         stage('package') {
             steps {
                 echo 'package has not been configured yet'
+                sh 'cd worker && mvn package'
             }
         }
     }
