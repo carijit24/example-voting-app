@@ -1,34 +1,52 @@
 pipeline {
-    agent any
-
-    tools{
-        maven 'maven-home'
+    agent {
+      docker {
+        image 'maven:3.6.1-jdk-8-slim'
+        args '-v $HOME/.m2:/root/.m2'
+      }
     }
 
     stages {
         stage('build') {
-            steps {
-                echo 'compiling the worker module'
-                sh 'cd worker && mvn compile'
-            }
+          when{
+            changeset: "**/worker/**"
+          }
+          steps {
+              echo 'building worker app'
+              dir('worker'){
+                sh 'mvn compile'
+              }
+          }
         }
         stage('test') {
-            steps {
-                echo 'test has not been configured yet'
-                sh 'cd worker && mvn clean test'
-            }
+          when{
+            changeset: "**/worker/**"
+          }
+          steps {
+              echo 'running unit test cases on worker app'
+              dir('worker'){
+                sh 'mvn clean test'
+              }
+          }
         }
         stage('package') {
-            steps {
-                echo 'package has not been configured yet'
-                sh 'cd worker && mvn package'
-            }
+          when{
+            branch 'master'
+            changeset: "**/worker/**"
+          }
+          steps {
+              echo 'package worker app into a jar file'
+              dir('worker'){
+                sh 'mvn package -DskipTests'
+                archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
+              }
+          }
         }
     }
 
     post{
         always{
-            echo 'build pipeline for worker is complete..'
+            echo 'the job is complete'
         }
     }
 }
