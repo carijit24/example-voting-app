@@ -8,7 +8,7 @@ pipeline {
 
     stages {
         stage('build') {
-          when{
+          when {
             changeset: "**/worker/**"
           }
           steps {
@@ -19,7 +19,7 @@ pipeline {
           }
         }
         stage('test') {
-          when{
+          when {
             changeset: "**/worker/**"
           }
           steps {
@@ -30,7 +30,7 @@ pipeline {
           }
         }
         stage('package') {
-          when{
+          when {
             branch 'master'
             changeset: "**/worker/**"
           }
