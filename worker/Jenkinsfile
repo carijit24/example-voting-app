@@ -8,39 +8,39 @@ pipeline {
 
     stages {
         stage('build') {
-          when {
-            changeset: "**/worker/**"
-          }
-          steps {
-              echo 'building worker app'
-              dir('worker'){
-                sh 'mvn compile'
-              }
-          }
+            when {
+              changeset: "**/worker/**"
+            }
+            steps {
+                echo 'building worker app'
+                dir('worker'){
+                  sh 'mvn compile'
+                }
+            }
         }
         stage('test') {
-          when {
-            changeset: "**/worker/**"
-          }
-          steps {
-              echo 'running unit test cases on worker app'
-              dir('worker'){
-                sh 'mvn clean test'
-              }
-          }
+            when {
+              changeset: "**/worker/**"
+            }
+            steps {
+                echo 'running unit test cases on worker app'
+                dir('worker'){
+                  sh 'mvn clean test'
+                }
+            }
         }
         stage('package') {
-          when {
-            branch 'master'
-            changeset: "**/worker/**"
-          }
-          steps {
-              echo 'package worker app into a jar file'
-              dir('worker'){
-                sh 'mvn package -DskipTests'
-                archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
-              }
-          }
+            when {
+              branch 'master'
+              changeset: "**/worker/**"
+            }
+            steps {
+                echo 'package worker app into a jar file'
+                dir('worker'){
+                  sh 'mvn package -DskipTests'
+                  archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
+                }
+            }
         }
     }
 
